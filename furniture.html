@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="furniture.css">
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="camping.html">Camping</a>
+        <a href="furniture.html">Furniture</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="offers.html">Special Offers</a>
+        <a href="basket.html">Basket</a>
+    </div>
+
+    <div class="container">
+        <h1>Furniture</h1>
+        <div id="product-list"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            showProductList();
+        });
+
+        function showProductList() {
+            var products = [
+                {
+                    name: "Sofa",
+                    price: 299.99,
+                    image: "sofa.jpg",
+                    description: "A comfortable sofa for your living room."
+                },
+                {
+                    name: "Coffee Table",
+                    price: 99.99,
+                    image: "coffee-table.jpg",
+                    description: "A stylish coffee table to complement your furniture."
+                },
+                {
+                    name: "Dining Set",
+                    price: 499.99,
+                    image: "dining-set.jpg",
+                    description: " dinner table for 3"
+                }
+            ];
+
+            var productListContainer = document.getElementById("product-list");
+            productListContainer.innerHTML = "";
+
+            products.forEach(function(product) {
+                var productCard = document.createElement("div");
+                productCard.classList.add("product-card");
+
+                var imageElement = document.createElement("img");
+                imageElement.src = product.image;
+                imageElement.alt = product.name;
+
+                var productInfo = document.createElement("div");
+                productInfo.classList.add("product-info");
+
+                var productName = document.createElement("h3");
+                productName.textContent = product.name;
+
+                var productDescription = document.createElement("p");
+                productDescription.textContent = product.description;
+
+                var productPrice = document.createElement("p");
+                productPrice.classList.add("price");
+                productPrice.textContent = "$" + product.price.toFixed(2);
+
+                var addToBasketButton = document.createElement("button");
+                addToBasketButton.textContent = "Add to Basket";
+                addToBasketButton.classList.add("add-to-basket");
+                addToBasketButton.addEventListener("click", function() {
+                    addToBasket(product);
+                });
+
+                productInfo.appendChild(productName);
+                productInfo.appendChild(productDescription);
+                productInfo.appendChild(productPrice);
+                productInfo.appendChild(addToBasketButton);
+
+                productCard.appendChild(imageElement);
+                productCard.appendChild(productInfo);
+
+                productListContainer.appendChild(productCard);
+            });
+        }
+
+        function addToBasket(product) {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var existingItem = basketItems.find(item => item.product === product.name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                var newItem = {
+                    product: product.name,
+                    price: product.price,
+                    quantity: 1
+                };
+                basketItems.push(newItem);
+            }
+            localStorage.setItem("basketItems", JSON.stringify(basketItems));
+            showNotification("Item added to basket!", "success");
+        }
+
+        function showNotification(message, type) {
+            var notification = document.createElement("div");
+            notification.textContent = message;
+            notification.className = "notification " + type;
+            notification.style.padding = "10px";
+            notification.style.marginBottom = "10px";
+            notification.style.color = "white";
+
+            if (type === "success") {
+                notification.style.backgroundColor = "#4CAF50";
+            } else if (type === "error") {
+                notification.style.backgroundColor = "#f44336";
+            }
+
+            setTimeout(function() {
+                notification.remove();
+            }, 3000);
+
+            document.body.appendChild(notification);
+        }
+    </script>
+</body>
+</html>

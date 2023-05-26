@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="camping.css">
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="camping.html">Camping</a>
+        <a href="furniture.html">Furniture</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="offers.html">Special Offers</a>
+        <a href="basket.html">Basket</a>
+    </div>
+
+    <div class="container">
+        <h1>Camping Items</h1>
+        <ul class="product-list">
+            <li class="product-item left">
+                <img src="tent.jpg" alt="Camping Tent">
+                <h3>Camping Tent</h3>
+                <p>$99.99</p>
+                <div class="add-to-basket">
+                    <button onclick="addToBasket('Camping Tent', 99.99)">Add to Basket</button>
+                </div>
+            </li>
+            <li class="product-item center">
+                <img src="cooking-stove.jpg" alt="Cooking Stove">
+                <h3>Cooking Stove</h3>
+                <p>$29.99</p>
+                <div class="add-to-basket">
+                    <button onclick="addToBasket('Cooking Stove', 29.99)">Add to Basket</button>
+                </div>
+            </li>
+            <li class="product-item right">
+                <img src="sleeping-bag.jpg" alt="Sleeping Bag">
+                <h3>Sleeping Bag</h3>
+                <p>$49.99</p>
+                <div class="add-to-basket">
+                    <button onclick="addToBasket('Sleeping Bag', 49.99)">Add to Basket</button>
+                </div>
+            </li>
+        </ul>
+
+        <div class="notification" id="notification"></div>
+    </div>
+
+    <script>
+        function addToBasket(product, price) {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var existingItem = basketItems.find(item => item.product === product);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                basketItems.push({ product: product, price: price, quantity: 1 });
+            }
+
+            localStorage.setItem("basketItems", JSON.stringify(basketItems));
+            showNotification('Item added to basket successfully!', 'success');
+        }
+
+        function showNotification(message, type) {
+            var notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            setTimeout(function() {
+                notification.textContent = '';
+                notification.className = 'notification';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

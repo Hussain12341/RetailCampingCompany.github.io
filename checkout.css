@@ -1,0 +1,95 @@
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .checkout-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .notification {
+            padding: 10px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        .error {
+            background-color: #f44336;
+        }
+
+        .basket-items {
+            margin-top: 20px;
+        }
+
+        .basket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .basket-item img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+
+        .basket-item .product-info {
+            flex-grow: 1;
+        }
+
+        .basket-item .product-info h4 {
+            margin: 0;
+        }
+
+        .basket-item .product-info p {
+            margin: 0;
+        }
+
+        .basket-item .quantity {
+            width: 60px;
+            text-align: center;
+        }
+
+        .basket-item .price {
+            width: 80px;
+            text-align: right;
+        }
+
+        .total {
+            margin-top: 10px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .go-back-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }

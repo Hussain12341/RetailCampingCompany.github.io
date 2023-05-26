@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="basket.css">
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="camping.html">Camping</a>
+        <a href="furniture.html">Furniture</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="offers.html">Special Offers</a>
+        <a href="basket.html">Basket</a>
+    </div>
+
+    <div class="container">
+        <h1>Your Basket</h1>
+        <div id="basket-items"></div>
+        <div class="total">Total: $<span id="total-price">0.00</span></div>
+        <button class="checkout-button" id="checkout-button" disabled onclick="redirectToCheckout()">Checkout</button>
+        <div class="notification" id="notification"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            showBasketItems();
+            updateTotalPrice();
+            updateCheckoutButton();
+        });
+
+        function showBasketItems() {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var basketItemsContainer = document.getElementById("basket-items");
+            basketItemsContainer.innerHTML = "";
+
+            basketItems.forEach(function(item) {
+                var itemContainer = document.createElement("div");
+                itemContainer.classList.add("basket-item");
+
+                var imageElement = document.createElement("img");
+                imageElement.src = getImagePath(item.product);
+                imageElement.alt = item.product;
+
+                var productInfo = document.createElement("div");
+                productInfo.classList.add("product-info");
+
+                var productName = document.createElement("h4");
+                productName.textContent = item.product;
+
+                var quantity = document.createElement("input");
+                quantity.classList.add("quantity");
+                quantity.type = "number";
+                quantity.min = 1;
+                quantity.value = item.quantity;
+                quantity.addEventListener("input", function() {
+                    updateQuantity(item.product, parseInt(quantity.value));
+                    updateTotalPrice();
+                });
+
+                var price = document.createElement("div");
+                price.classList.add("price");
+                price.textContent = "$" + (item.price * item.quantity).toFixed(2);
+
+                var removeButton = document.createElement("button");
+                removeButton.textContent = "Remove";
+                removeButton.addEventListener("click", function() {
+                    removeItemFromBasket(item.product);
+                    updateTotalPrice();
+                    updateCheckoutButton();
+                });
+
+                productInfo.appendChild(productName);
+                productInfo.appendChild(quantity);
+
+                itemContainer.appendChild(imageElement);
+                itemContainer.appendChild(productInfo);
+                itemContainer.appendChild(price);
+                itemContainer.appendChild(removeButton);
+
+                basketItemsContainer.appendChild(itemContainer);
+            });
+        }
+
+        function updateQuantity(product, quantity) {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var item = basketItems.find(item => item.product === product);
+            if (item) {
+                item.quantity = quantity;
+                localStorage.setItem("basketItems", JSON.stringify(basketItems));
+            }
+        }
+
+        function removeItemFromBasket(product) {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var updatedItems = basketItems.filter(item => item.product !== product);
+            localStorage.setItem("basketItems", JSON.stringify(updatedItems));
+            showBasketItems();
+            showNotification("Item removed from basket!", "success");
+        }
+
+        function updateTotalPrice() {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var totalPrice = basketItems.reduce(function(total, item) {
+                return total + (item.price * item.quantity);
+            }, 0);
+            document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+        }
+
+        function updateCheckoutButton() {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+            var checkoutButton = document.getElementById("checkout-button");
+            if (basketItems.length > 0) {
+                checkoutButton.removeAttribute("disabled");
+            } else {
+                checkoutButton.setAttribute("disabled", true);
+            }
+        }
+
+        function showNotification(message, type) {
+            var notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.className = "notification " + type;
+            setTimeout(function() {
+                notification.textContent = "";
+                notification.className = "notification";
+            }, 3000);
+        }
+
+        function getImagePath(product) {
+            switch (product) {
+                case "Camping Tent":
+                    return "tent.jpg";
+                case "Sofa":
+                    return "sofa.jpg";
+                case "Coffee Table":
+                    return "coffee-table.jpg";
+                case "Cooking Stove":
+                    return "cooking-stove.jpg";
+                case "Dining Set":
+                    return "dining-set.jpg";
+                case "Sleeping Bag":
+                    return "sleeping-bag.jpg";
+                case "Family Pack":
+                    return "family-pack.jpg";
+                case "Solo Pack":
+                    return "solo-pack.jpg";
+                case "Outdoor Furniture Set":
+                    return "outdoor-furniture-set.jpg";
+                default:
+                    return "";
+            }
+        }
+
+        function redirectToCheckout() {
+            var basketItems = JSON.parse(localStorage.getItem("basketItems")) || [];
+
+            if (basketItems.length > 0) {
+                // Redirect to the checkout page
+                window.location.href = "checkout.html";
+            } else {
+                // Show notification that the basket is empty
+                showNotification("Cannot proceed to checkout. Your basket is empty.", "error");
+            }
+        }
+    </script>
+</body>
+</html>
